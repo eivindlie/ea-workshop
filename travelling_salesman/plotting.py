@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 import math
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -20,7 +20,7 @@ def plot_route(route, title=None) -> None:
     plt.show()
 
 
-def plot_history(history: (int, List[Fitness])) -> None:
+def plot_history(history: Tuple[int, List[Fitness]]) -> None:
     # Plot score history
     fig, ax1 = plt.subplots(figsize=(8, 6))
     ax1.set_title('Score history')
