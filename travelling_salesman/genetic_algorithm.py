@@ -1,0 +1,154 @@
+import random
+from typing import List
+
+from .environment import Fitness, City
+from .plotting import plot_route
+
+
+def create_random_route(cities: List[City]) -> List[City]:
+    route = random.sample(cities, len(cities))
+    return route
+
+
+def initialize_population(population_size: int, cities: List[City]) -> List[List[City]]:
+    population = []
+
+    # TODO Initialiser populasjonen
+    for _ in range(population_size):
+        population.append(create_random_route(cities))
+
+    return population
+
+
+def evaluate(population) -> List[Fitness]:
+    fitness_results = [Fitness(x) for x in population]
+    return sorted(fitness_results, key=lambda x: x.fitness, reverse=True)
+
+
+def selection(population_ranked: List[Fitness], elite_size: float):
+    selection_results = []
+
+    # Velger ut de beste løsningene basert på elite_size
+    for i in range(elite_size):
+        selection_results.append(population_ranked[i])
+
+    # TODO Implementer selection-mekanisme
+    while len(selection_results) < len(population_ranked):
+        competitors = random.sample(population_ranked, 5)
+        winner = max(competitors, key=lambda x: x.fitness)
+        selection_results.append(winner)
+
+    return [x.route for x in selection_results]
+
+
+def crossover(parent1, parent2) -> List[City]:
+    # TODO Implementer crossover
+
+    crossover_point = random.randint(0, len(parent1) - 1)
+
+    child_p1 = parent1[:crossover_point]
+    child_p2 = [x for x in parent2 if x not in child_p1]
+
+    child = child_p1 + child_p2
+
+    return child
+
+
+def recombine(mating_pool: List[List[City]], elite_size: int) -> List[List[City]]:
+    children = []
+    length = len(mating_pool) - elite_size
+
+    # Lar igjen de beste løsningene bli med direkte
+    for i in range(elite_size):
+        children.append(mating_pool[i])
+
+    pool = random.sample(mating_pool, len(mating_pool))
+    for i in range(length):
+        child = crossover(pool[i], pool[-i - 1])
+        children.append(child)
+
+    return children
+
+
+def mutate(individual: List[City], mutation_rate: float) -> List[City]:
+    individual = [x for x in individual]
+
+    # TODO Implementer mutation-mekanisme
+    for swapped in range(len(individual)):
+        if random.random() < mutation_rate:
+            swap_with = int(random.random() * len(individual))
+            individual[swapped], individual[swap_with] = (
+                individual[swap_with],
+                individual[swapped],
+            )
+
+    return individual
+
+
+def mutate_population(
+    population: List[List[City]], mutation_rate: float
+) -> List[List[City]]:
+    mutated_pop = [mutate(x, mutation_rate) for x in population]
+
+    return mutated_pop
+
+
+def next_generation(
+    current_gen: List[List[City]], elite_size: int, mutation_rate: float
+) -> List[List[City]]:
+    pop_ranked = evaluate(current_gen)
+    mating_pool = selection(pop_ranked, elite_size)
+    children = recombine(mating_pool, elite_size)
+    next_gen = mutate_population(children, mutation_rate)
+
+    return next_gen
+
+
+def solve(
+    cities: List[City],
+    population_size: int,
+    elite_size: int,
+    mutation_rate: float,
+    generations: int,
+) -> List[City]:
+    initial_pop = initialize_population(population_size, cities)
+    best_initial_solution = evaluate(initial_pop)[0]
+    print(f"Initial distance: {best_initial_solution.distance}")
+    plot_route(best_initial_solution.route, "Initial")
+
+    pop = initial_pop
+
+    for g in range(generations):
+        pop = next_generation(pop, elite_size, mutation_rate)
+
+        if (g + 1) % 50 == 0:
+            best_current_solution = evaluate(pop)[0]
+            print(
+                f"[{g+1}/{generations}] Best distance: {best_current_solution.distance}"
+            )
+            plot_route(best_current_solution.route, f"Generation {g + 1}")
+
+    best_final_solution = evaluate(pop)[0]
+    print(f"Final distance: {best_final_solution.distance}")
+    plot_route(best_final_solution.route, "Final solution")
+
+    return best_final_solution.route
+
+
+def main():
+    city_list = []
+
+    for i in range(0, 25):
+        city_list.append(City(x=random.randint(0, 200), y=random.randint(0, 200)))
+
+    best_route = solve(
+        cities=city_list,
+        population_size=100,
+        elite_size=5,
+        mutation_rate=0.05,
+        generations=500,
+    )
+
+
+if __name__ == "__main__":
+    main()
