@@ -2,7 +2,7 @@ import random
 from typing import List
 
 from .environment import Fitness, City
-from .plotting import plot_route
+from .plotting import plot_route, plot_history
 
 
 def create_random_route(cities: List[City]) -> List[City]:
@@ -110,26 +110,35 @@ def solve(
     elite_size: int,
     mutation_rate: float,
     generations: int,
+    eval_frequency: int = 50,
+    show_plots: bool = True
 ) -> List[City]:
     initial_pop = initialize_population(population_size, cities)
     best_initial_solution = evaluate(initial_pop)[0]
     print(f"Initial distance: {best_initial_solution.distance}")
-    plot_route(best_initial_solution.route, "Initial")
+    if show_plots:
+        plot_route(best_initial_solution.route, "Initial")
 
     pop = initial_pop
+
+    history = [(0, best_initial_solution)]
 
     for g in range(generations):
         pop = next_generation(pop, elite_size, mutation_rate)
 
-        if (g + 1) % 50 == 0:
+        if (g + 1) % eval_frequency == 0:
             best_current_solution = evaluate(pop)[0]
+            history.append((g, best_current_solution))
             print(
                 f"[{g+1}/{generations}] Best distance: {best_current_solution.distance}"
             )
-            plot_route(best_current_solution.route, f"Generation {g + 1}")
+
+            if show_plots:
+                plot_route(best_current_solution.route, f"Generation {g + 1}")
 
     best_final_solution = evaluate(pop)[0]
     print(f"Final distance: {best_final_solution.distance}")
+    plot_history(history)
     plot_route(best_final_solution.route, "Final solution")
 
     return best_final_solution.route
@@ -147,6 +156,8 @@ def main():
         elite_size=5,
         mutation_rate=0.05,
         generations=500,
+        eval_frequency=25,
+        show_plots=False,
     )
 
 
