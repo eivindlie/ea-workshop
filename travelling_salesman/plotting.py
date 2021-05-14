@@ -23,18 +23,18 @@ def plot_route(route, title=None) -> None:
 def plot_history(history: Tuple[int, List[Fitness]]) -> None:
     # Plot score history
     fig, ax1 = plt.subplots(figsize=(8, 6))
-    ax1.set_title('Score history')
-    color = 'tab:red'
-    ax1.set_xlabel('Generation')
-    ax1.set_ylabel('Fitness', color=color)
-    ax1.plot([x[1].fitness for x in history], label='Fitness', color=color)
-    ax1.tick_params(axis='y', labelcolor=color)
+    ax1.set_title("Score history")
+    color = "tab:red"
+    ax1.set_xlabel("Generation")
+    ax1.set_ylabel("Fitness", color=color)
+    ax1.plot([x[1].fitness for x in history], label="Fitness", color=color)
+    ax1.tick_params(axis="y", labelcolor=color)
 
-    color = 'tab:blue'
+    color = "tab:blue"
     ax2 = ax1.twinx()
-    ax2.plot([x[1].distance for x in history], label='Distance', color=color)
-    ax2.set_ylabel('Distance', color=color)
-    ax2.tick_params(axis='y', labelcolor=color)
+    ax2.plot([x[1].distance for x in history], label="Distance", color=color)
+    ax2.set_ylabel("Distance", color=color)
+    ax2.tick_params(axis="y", labelcolor=color)
 
     # Plot routes
     cols = min(len(history), 5)
@@ -44,7 +44,7 @@ def plot_history(history: Tuple[int, List[Fitness]]) -> None:
 
     for i, gen in enumerate(history):
         ax = axes[i]
-        ax.set_title(f'Generation {gen[0] + 1}')
+        ax.set_title(f"Generation {gen[0] + 1}")
         route = gen[1].route
 
         for i in range(len(route)):

@@ -111,7 +111,7 @@ def solve(
     mutation_rate: float,
     generations: int,
     eval_frequency: int = 50,
-    show_plots: bool = True
+    show_plots: bool = True,
 ) -> List[City]:
     initial_pop = initialize_population(population_size, cities)
     best_initial_solution = evaluate(initial_pop)[0]
