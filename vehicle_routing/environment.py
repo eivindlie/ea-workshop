@@ -34,7 +34,7 @@ class Environment:
         self.num_vehicles = num_vehicles
 
 
-def evaluate(environment: Environment, solution: List[List[City]]) -> float:
+def evaluate(solution: List[List[City]], environment: Environment) -> float:
     distance = 0
 
     for vehicle_cities in solution:
@@ -48,17 +48,29 @@ def evaluate(environment: Environment, solution: List[List[City]]) -> float:
     return 1 / distance
 
 
-def plot_solution(solution: List[List[City]], environment: Environment) -> None:
-    colors = ['blue', 'red', 'yellow', 'orange']
+def plot_solution(
+    solution: List[List[City]], environment: Environment, title: str = None
+) -> None:
+    colors = ["blue", "red", "yellow", "orange"]
     for r, vehicle_cities in enumerate(solution):
         color = colors[r % len(colors)]
 
         route = [environment.depot] + vehicle_cities + [environment.depot]
 
         for i in range(len(route) - 1):
-            plt.plot((route[i].x, route[i + 1].x), (route[i].y, route[i + 1].y), color=color)
+            plt.plot(
+                (route[i].x, route[i + 1].x), (route[i].y, route[i + 1].y), color=color
+            )
 
-    plt.scatter([c.x for c in environment.cities], [c.y for c in environment.cities], color='black', s=10)
-    plt.scatter((environment.depot.x,), (environment.depot.y,), color='green', s=50)
+    plt.scatter(
+        [c.x for c in environment.cities],
+        [c.y for c in environment.cities],
+        color="black",
+        s=10,
+    )
+    plt.scatter((environment.depot.x,), (environment.depot.y,), color="green", s=50)
+
+    if title:
+        plt.title(title)
 
     plt.show()
