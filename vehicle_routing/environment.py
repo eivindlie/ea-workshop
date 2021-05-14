@@ -31,7 +31,7 @@ class Environment:
             for _ in range(num_cities)
         ]
 
-        self.depot = City(x=random.randint(0, 200), y=random.randint(0, 200))
+        self.depot = City(x=random.randint(70, 130), y=random.randint(70, 130))
 
         self.num_vehicles = num_vehicles
         self.vehicle_capacity = vehicle_capacity
