@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 
 class City:
@@ -35,3 +36,12 @@ class Fitness:
         if self._fitness == 0:
             self._fitness = 1 / float(self.distance)
         return self._fitness
+
+
+def initialize_random_environment(num_cities=25):
+    city_list = []
+
+    for _ in range(num_cities):
+        city_list.append(City(x=random.randint(0, 200), y=random.randint(0, 200)))
+
+    return city_list

@@ -1,7 +1,7 @@
 import random
 from typing import List
 
-from .environment import Fitness, City
+from .environment import Fitness, City, initialize_random_environment
 from .plotting import plot_route, plot_history
 
 
@@ -145,10 +145,7 @@ def solve(
 
 
 def main():
-    city_list = []
-
-    for i in range(0, 25):
-        city_list.append(City(x=random.randint(0, 200), y=random.randint(0, 200)))
+    city_list = initialize_random_environment()
 
     best_route = solve(
         cities=city_list,
