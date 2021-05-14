@@ -1,6 +1,7 @@
-from travelling_salesman.plotting import plot_history, plot_route
 from typing import List
 import random
+from scipy.special import expit
+from travelling_salesman.plotting import plot_history, plot_route
 from .environment import City, Fitness, initialize_random_environment
 
 
@@ -24,19 +25,27 @@ def evaluate(solutions: List[List[City]]) -> List[Fitness]:
     return [Fitness(x) for x in solutions]
 
 
-def select(solutions: List[Fitness], temperature: float) -> Fitness:
-    # This is steepest hill climbing.
-    # To implement random hill climbing, pick random neighbour,
-    # and accept if it is better than the current solution
-    return max(solutions, key=lambda x: x.fitness).route
+def select(current_solution: Fitness, solutions: List[Fitness], temp: float) -> Fitness:
+    next_solution = random.sample(solutions, 1)[0]
+    if next_solution.fitness > current_solution.fitness:
+        return next_solution
+    elif random.random() < expit(
+        (next_solution.fitness - current_solution.fitness) / temp
+    ):
+        return next_solution
+    return current_solution
 
 
-def next_generation(cur_solution: List[City]) -> List[City]:
+def next_generation(cur_solution: List[City], temp: float) -> List[City]:
     neighbours = get_neighbours(cur_solution)
     fitness = evaluate(neighbours)
-    next_gen = select(fitness)
+    next_gen = select(Fitness(cur_solution), fitness, temp)
 
-    return next_gen
+    return next_gen.route
+
+
+def exponential_multiplicative_decay(initial_value, decay):
+    return lambda t: initial_value * decay ** t
 
 
 def solve(
@@ -44,7 +53,11 @@ def solve(
     generations: int = 500,
     eval_frequency: int = 50,
     show_plots: bool = True,
+    temperature_function=None,
 ) -> Fitness:
+    if temperature_function == None:
+        temperature_function = exponential_multiplicative_decay(40, 0.95)
+
     initial_solution = create_random_route(cities)
     best_initial_solution = evaluate([initial_solution])[0]
     print(f"Initial distance: {best_initial_solution.distance}")
@@ -55,7 +68,8 @@ def solve(
     history = [(0, best_initial_solution)]
 
     for g in range(generations):
-        solution = next_generation(solution)
+        temp = temperature_function(g)
+        solution = next_generation(solution, temp)
 
         if (g + 1) % eval_frequency == 0:
             best_current_solution = evaluate([solution])[0]
@@ -78,9 +92,10 @@ def main():
 
     best_route = solve(
         cities,
-        generations=50,
-        eval_frequency=5,
+        generations=2500,
+        eval_frequency=200,
         show_plots=False,
+        temperature_function=exponential_multiplicative_decay(100, 0.99),
     )
 
 

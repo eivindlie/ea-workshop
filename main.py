@@ -10,7 +10,7 @@ if __name__ == "__main__":
                 tsp_hc()
             elif sys.argv[2] in ["ga", "genetic_algorithm"]:
                 tsp_ga()
-            elif sys.arg[2] in ["sa", "simulated_annealing"]:
+            elif sys.argv[2] in ["sa", "simulated_annealing"]:
                 tsp_sa()
         else:
             tsp_ga()
