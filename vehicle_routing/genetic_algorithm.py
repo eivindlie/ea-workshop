@@ -183,8 +183,8 @@ def solve(
 
 def main():
     environment = Environment(
-        num_cities=50,
-        num_vehicles=7,
+        num_cities=25,
+        num_vehicles=5,
         vehicle_capacity=8,
         seed=None
     )
