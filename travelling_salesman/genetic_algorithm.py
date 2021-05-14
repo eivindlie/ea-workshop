@@ -155,8 +155,8 @@ def main():
         population_size=100,
         elite_size=5,
         mutation_rate=0.05,
-        generations=500,
-        eval_frequency=25,
+        generations=150,
+        eval_frequency=10,
         show_plots=False,
     )
 
