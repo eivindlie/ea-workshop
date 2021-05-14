@@ -21,7 +21,9 @@ class City:
 
 
 class Environment:
-    def __init__(self, num_cities=25, num_vehicles=5, seed=None) -> None:
+    def __init__(
+        self, num_cities=25, num_vehicles=5, vehicle_capacity=10, seed=None
+    ) -> None:
         random.seed(seed)
 
         self.cities = [
@@ -32,6 +34,7 @@ class Environment:
         self.depot = City(x=random.randint(0, 200), y=random.randint(0, 200))
 
         self.num_vehicles = num_vehicles
+        self.vehicle_capacity = vehicle_capacity
 
 
 def evaluate(solution: List[List[City]], environment: Environment) -> float:
@@ -44,6 +47,9 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
             from_city = route[i]
             to_city = route[i + 1]
             distance += from_city.distance(to_city)
+
+        if len(vehicle_cities) > environment.vehicle_capacity:
+            distance += 500 * (len(vehicle_cities) - environment.vehicle_capacity)
 
     return 1 / distance
 

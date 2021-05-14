@@ -182,13 +182,19 @@ def solve(
 
 
 def main():
-    environment = Environment(num_cities=25, num_vehicles=5, seed=None)
+    environment = Environment(
+        num_cities=25,
+        num_vehicles=5,
+        vehicle_capacity=8,
+        seed=None
+    )
+    
     solve(
         environment,
         population_size=50,
         elite_size=5,
-        mutation_rate=0.9,
-        generations=2500,
+        mutation_rate=0.05,
+        generations=2000,
         eval_frequency=100,
         show_plots=False,
     )
