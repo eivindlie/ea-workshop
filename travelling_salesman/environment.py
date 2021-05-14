@@ -38,8 +38,10 @@ class Fitness:
         return self._fitness
 
 
-def initialize_random_environment(num_cities=25):
+def initialize_random_environment(num_cities=25, seed=None):
     city_list = []
+
+    random.seed(seed)
 
     for _ in range(num_cities):
         city_list.append(City(x=random.randint(0, 200), y=random.randint(0, 200)))

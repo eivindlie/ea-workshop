@@ -24,19 +24,19 @@ def evaluate(solutions: List[List[City]]) -> List[Fitness]:
     return [Fitness(x) for x in solutions]
 
 
-def select(current_solution: Fitness, solutions: List[Fitness]) -> Fitness:
-    next_solution = random.sample(solutions, 1)[0]
-    if next_solution.fitness > current_solution.fitness:
-        return next_solution
-    return current_solution
+def select(solutions: List[Fitness], temperature: float) -> Fitness:
+    # This is steepest hill climbing.
+    # To implement random hill climbing, pick random neighbour,
+    # and accept if it is better than the current solution
+    return max(solutions, key=lambda x: x.fitness).route
 
 
 def next_generation(cur_solution: List[City]) -> List[City]:
     neighbours = get_neighbours(cur_solution)
     fitness = evaluate(neighbours)
-    next_gen = select(Fitness(cur_solution), fitness)
+    next_gen = select(fitness)
 
-    return next_gen.route
+    return next_gen
 
 
 def solve(
