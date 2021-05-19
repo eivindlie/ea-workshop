@@ -37,10 +37,13 @@ class Environment:
         self.vehicle_capacity = vehicle_capacity
 
 
-def evaluate(solution: List[List[City]], environment: Environment) -> float:
-    distance = 0
+def calculate_route_lengths(
+    solution: List[List[City]], environment: Environment
+) -> List[float]:
+    all_distances = []
 
     for vehicle_cities in solution:
+        distance = 0
         route = [environment.depot] + vehicle_cities + [environment.depot]
 
         for i in range(len(route) - 1):
@@ -50,6 +53,14 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
 
         if len(vehicle_cities) > environment.vehicle_capacity:
             distance += 500 * (len(vehicle_cities) - environment.vehicle_capacity)
+
+        all_distances.append(distance)
+
+    return all_distances
+
+
+def evaluate(solution: List[List[City]], environment: Environment) -> float:
+    distance = sum(calculate_route_lengths(solution, environment))
 
     return 1 / distance
 
