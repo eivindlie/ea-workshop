@@ -127,6 +127,22 @@ class Archive:
         
         anim = FuncAnimation(fig, update, np.arange(1, len(scores)), init_func=init)
         plt.show()
+    
+    def plot_archive_solutions(self):
+        fig, axes = plt.subplots(self.num_cars_dimension_size, self.average_route_length_dimension_size, figsize=(15, 10))
+
+        for y in range(self.average_route_length_dimension_size):
+            for x in range(self.num_cars_dimension_size):
+                solution = self.archive[y][x][1]
+                if solution is None:
+                    continue
+                plot_solution(
+                    decode_solution(solution, self.environment),
+                    self.environment,
+                    ax=axes[x][y]
+                )
+        
+        plt.show()
         
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
     for _ in range(n_solutions):
@@ -172,12 +188,7 @@ def solve(
     except KeyboardInterrupt:
         pass
 
-    best_final_solution = archive.get_best_solution()
-    #plot_solution(
-    #    decode_solution(best_final_solution, environment),
-    #    environment,
-    #    "Final best solution",
-    #)
+    archive.plot_archive_solutions()
 
     archive.plot_score_history(score_history, eval_frequency)
 
@@ -190,7 +201,7 @@ def main():
     solve(
         environment,
         steps=150000,
-        eval_frequency=1000,
+        eval_frequency=500,
         mutation_rate=0.05,
         num_cars_dimension_size=environment.num_vehicles,
         average_route_length_dimension_size=10,

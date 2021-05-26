@@ -66,8 +66,9 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
 
 
 def plot_solution(
-    solution: List[List[City]], environment: Environment, title: str = None
+    solution: List[List[City]], environment: Environment, title: str = None, ax=None
 ) -> None:
+    plotter = ax if ax is not None else plt
     colors = ["blue", "red", "yellow", "orange", "green", "cyan"]
     for r, vehicle_cities in enumerate(solution):
         color = colors[r % len(colors)]
@@ -75,19 +76,23 @@ def plot_solution(
         route = [environment.depot] + vehicle_cities + [environment.depot]
 
         for i in range(len(route) - 1):
-            plt.plot(
+            plotter.plot(
                 (route[i].x, route[i + 1].x), (route[i].y, route[i + 1].y), color=color
             )
 
-    plt.scatter(
+    plotter.scatter(
         [c.x for c in environment.cities],
         [c.y for c in environment.cities],
         color="black",
         s=10,
     )
-    plt.scatter((environment.depot.x,), (environment.depot.y,), color="green", s=50)
+    plotter.scatter((environment.depot.x,), (environment.depot.y,), color="green", s=50)
 
     if title:
-        plt.title(title)
+        if ax is not None:
+            ax.set_title(title)
+        else:
+            plt.title(title)
 
-    plt.show()
+    if ax is None:
+        plt.show()
