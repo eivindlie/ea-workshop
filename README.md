@@ -79,8 +79,9 @@ MAP-Elites er mer en løs strategi enn en komplett algoritme, og bygger på et e
 
 Vehicle Routing Problem er fortsatt et nokså enkelt problem, men det er komplekst nok til at vi kan prøve ut MAP-elites. En viktig komponent i en MAP-elites-løsning er hvordan arkivet er inndelt. I denne oppgaven prøver vi oss på en inndeling langs to dimensjoner: antall biler som er aktive i løsningen, og gjennomsnittlig lengde på rutene disse tilbakelegger.
 
-### Oppgave:
+### Oppgaver:
 
-- Kjør koden i fila `vehicle_routing/map_elites`. Hvordan er resultatet her sammenliknet med den genetiske algoritmen? Prøv å forstå hvordan koden er bygd opp, og hvordan denne algoritmen skiller seg fra en genetisk algoritme
+- Åpne `vehicle_routing/map_elites`, og fyll inn kode der det står `# TODO`
+- Kjør fila `vehicle_routing/map_elites`. Hvordan er resultatet her sammenliknet med den genetiske algoritmen? Prøv å forstå hvordan koden er bygd opp, og hvordan denne algoritmen skiller seg fra en genetisk algoritme
 
 > MAP-Elites-implementasjonen bruker de samme genetiske operatorene som du implementerte for den genetiske algoritmen. Vi bruker samme representasjon, så dette skal gå helt fint. Det kan likevel hende at det lønner seg å endre på noen parametere – bl.a. tåler MAP-Elites mer exploration, siden vi uansett sikrer at vi tar vare på de beste løsningene innenfor hver nisje. Prøv deg gjerne litt fram!
