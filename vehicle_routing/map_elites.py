@@ -1,7 +1,28 @@
 import random
 
-from .genetic_algorithm import crossover, mutate, decode_solution, create_random_solution
-from .environment import calculate_route_lengths, Environment, plot_solution
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from .genetic_algorithm import (
+    crossover,
+    mutate,
+    decode_solution,
+    create_random_solution,
+)
+from .environment import (
+    calculate_route_lengths,
+    Environment,
+    plot_solution,
+)
+
+
+def plot_map_elite_scores(scores: np.ndarray):
+    sns.heatmap(scores, vmin=0, vmax=1, mask=(scores == -1), annot=True)
+    plt.title("Archive scores")
+    plt.ylabel("Gjennomsnittlig rutelengde")
+    plt.xlabel("Antall biler")
+    plt.show()
 
 
 class Archive:
@@ -47,7 +68,9 @@ class Archive:
         )
 
     def evaluate_and_replace_solution(self, new_solution):
-        route_lengths = calculate_route_lengths(decode_solution(new_solution, self.environment), self.environment)
+        route_lengths = calculate_route_lengths(
+            decode_solution(new_solution, self.environment), self.environment
+        )
         average_route_length = self._get_average_route_length(route_lengths)
         num_cars = self._get_num_cars(new_solution)
 
@@ -68,6 +91,16 @@ class Archive:
         pool = self._get_flattened_archive()
 
         return [x[1] for x in random.sample(pool, n)]
+
+    def get_scores_as_array(self):
+        scores = np.array(
+            [
+                [self.archive[x][y][0] for y in range(self.num_cars_dimension_size)]
+                for x in range(self.average_route_length_dimension_size)
+            ]
+        )
+
+        return scores
 
     def get_best_score(self):
         flattened_archive = self._get_flattened_archive()
@@ -113,7 +146,13 @@ def solve(
             print(f"[{g + 1}/{steps}] Best distance: {1 / best_current_score}")
 
     best_final_solution = archive.get_best_solution()
-    plot_solution(decode_solution(best_final_solution, environment), environment, "Final best solution")
+    plot_solution(
+        decode_solution(best_final_solution, environment),
+        environment,
+        "Final best solution",
+    )
+
+    plot_map_elite_scores(archive.get_scores_as_array())
 
 
 def main():
