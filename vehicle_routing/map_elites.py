@@ -107,6 +107,7 @@ class Archive:
         ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
 
         fig = plt.figure(figsize=(15, 10))
+        fig.suptitle("History of archive scores (animated)")
 
         cbar = True
         def plot(data: np.ndarray):
@@ -133,6 +134,7 @@ class Archive:
     
     def plot_archive_solutions(self, show_plot: bool = True):
         fig, axes = plt.subplots(self.num_cars_dimension_size, self.average_route_length_dimension_size, figsize=(15, 10))
+        fig.suptitle("All solutions from archive")
         best_solution = self.get_best_solution()
 
         for y in range(self.average_route_length_dimension_size):
