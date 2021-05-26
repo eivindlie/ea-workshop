@@ -8,6 +8,8 @@ import seaborn as sns
 sns.set()
 
 
+OVERFILLED_VEHICLE_PENALTY = 250
+
 class City:
     def __init__(self, x: float, y: float) -> None:
         self.x = x
@@ -52,7 +54,7 @@ def calculate_route_lengths(
             distance += from_city.distance(to_city)
 
         if len(vehicle_cities) > environment.vehicle_capacity:
-            distance += 500 * (len(vehicle_cities) - environment.vehicle_capacity)
+            distance += OVERFILLED_VEHICLE_PENALTY * (len(vehicle_cities) - environment.vehicle_capacity)
 
         all_distances.append(distance)
 
