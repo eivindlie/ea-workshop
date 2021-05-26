@@ -119,13 +119,12 @@ class Archive:
         
         def init():
             plot(scores[0])
-            plt.title(f"Archive scores")
             plt.xlabel("Gjennomsnittlig rutelengde")
             plt.ylabel("Antall biler")
 
         def update(i: int):
             plot(scores[i])
-            plt.title(f"Archive scores (Step {(i + 1) * eval_frequency:06})")
+            plt.title(f"Step {(i + 1) * eval_frequency:06}")
         
         anim = FuncAnimation(fig, update, np.arange(1, len(scores)), init_func=init)
         if show_plot:
