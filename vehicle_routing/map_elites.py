@@ -1,10 +1,10 @@
 import random
 from typing import List
-import imageio
 
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 from .genetic_algorithm import (
     crossover,
@@ -105,31 +105,29 @@ class Archive:
     def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int):
         best_score = max(x.max() for x in scores)
         ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
+
+        fig = plt.figure()
+
+        cbar = True
+        def plot(data: np.ndarray):
+            nonlocal cbar
+            plt.cla()
+            sns.heatmap(data, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks, cbar=cbar)
+            cbar = False
         
-        filenames = []
-
-        for i, score_array in enumerate(scores):
-            filename = f"plots/{i}.png"
-            filenames.append(filename)
-
-            sns.heatmap(score_array, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks)
-            plt.title(f"Archive scores (Generation {(i + 1) * eval_frequency:04})")
+        def init():
+            plot(scores[0])
+            plt.title(f"Archive scores")
             plt.ylabel("Gjennomsnittlig rutelengde")
             plt.xlabel("Antall biler")
-            plt.savefig(filename)
-            plt.close()
 
+        def update(i: int):
+            plot(scores[i])
+            plt.title(f"Archive scores (Step {(i + 1) * eval_frequency:06})")
         
-        with imageio.get_writer('plots/me_scores.gif', mode='I') as writer:
-            for filename in filenames:
-                image = imageio.imread(filename)
-                writer.append_data(image)
+        anim = FuncAnimation(fig, update, np.arange(1, len(scores)), init_func=init)
+        plt.show()
         
-        
-
-        
-
-
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
     for _ in range(n_solutions):
         solution = create_random_solution(environment)
@@ -181,7 +179,7 @@ def solve(
     #    "Final best solution",
     #)
 
-    archive.plot_score_history(score_history)
+    archive.plot_score_history(score_history, eval_frequency)
 
 
 def main():
@@ -192,6 +190,7 @@ def main():
     solve(
         environment,
         steps=150000,
+        eval_frequency=1000,
         mutation_rate=0.05,
         num_cars_dimension_size=environment.num_vehicles,
         average_route_length_dimension_size=10,
