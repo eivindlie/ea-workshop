@@ -66,7 +66,7 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
 
 
 def plot_solution(
-    solution: List[List[City]], environment: Environment, title: str = None, ax=None
+    solution: List[List[City]], environment: Environment, title: str = None, ax=None, background_color=None
 ) -> None:
     plotter = ax if ax is not None else plt
     colors = ["blue", "red", "yellow", "orange", "green", "cyan"]
@@ -93,6 +93,10 @@ def plot_solution(
             ax.set_title(title)
         else:
             plt.title(title)
+    
+    if background_color is not None:
+        if ax is not None:
+            ax.set_facecolor(background_color)
 
     if ax is None:
         plt.show()

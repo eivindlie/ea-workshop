@@ -130,16 +130,20 @@ class Archive:
     
     def plot_archive_solutions(self):
         fig, axes = plt.subplots(self.num_cars_dimension_size, self.average_route_length_dimension_size, figsize=(15, 10))
+        best_solution = self.get_best_solution()
 
         for y in range(self.average_route_length_dimension_size):
             for x in range(self.num_cars_dimension_size):
                 solution = self.archive[y][x][1]
+                background_color = "xkcd:mint green" if solution == best_solution else None
+
                 if solution is None:
                     continue
                 plot_solution(
                     decode_solution(solution, self.environment),
                     self.environment,
-                    ax=axes[x][y]
+                    ax=axes[x][y],
+                    background_color=background_color
                 )
         
         plt.show()
