@@ -195,7 +195,7 @@ def solve(
 
 def main():
     environment = Environment(
-        num_cities=25, num_vehicles=5, vehicle_capacity=6, seed=None
+        num_cities=25, num_vehicles=5, vehicle_capacity=9, seed=None
     )
 
     solve(
