@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 import numpy as np
 import seaborn as sns
@@ -15,15 +16,6 @@ from .environment import (
     Environment,
     plot_solution,
 )
-
-
-def plot_map_elite_scores(scores: np.ndarray):
-    sns.heatmap(scores, vmin=0, vmax=1, mask=(scores == -1), annot=True)
-    plt.title("Archive scores")
-    plt.ylabel("Gjennomsnittlig rutelengde")
-    plt.xlabel("Antall biler")
-    plt.show()
-
 
 class Archive:
     def __init__(
@@ -64,8 +56,8 @@ class Archive:
         avg = sum(non_zero_lengths) / len(non_zero_lengths)
 
         return int(
-            min(0.99999, (avg / self.max_average_route_length))
-            * self.num_cars_dimension_size
+            min(0.99999, (avg / float(self.max_average_route_length)))
+            * self.average_route_length_dimension_size
         )
 
     def evaluate_and_replace_solution(self, new_solution):
@@ -104,15 +96,23 @@ class Archive:
         return scores
 
     def get_best_score(self):
-        flattened_archive = self._get_flattened_archive()
         return max(self._get_flattened_archive(), key=lambda x: x[0])[0]
 
     def get_best_solution(self):
         return max(self._get_flattened_archive(), key=lambda x: x[1])[1]
 
+    def plot_score_history(self, scores: List[np.ndarray]):
+        best_score = max(x.max() for x in scores)
+        ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
+        sns.heatmap(scores[-1], vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks)
+        plt.title("Archive scores")
+        plt.ylabel("Gjennomsnittlig rutelengde")
+        plt.xlabel("Antall biler")
+        plt.show()
+
 
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
-    for i in range(n_solutions):
+    for _ in range(n_solutions):
         solution = create_random_solution(environment)
         archive.evaluate_and_replace_solution(solution)
 
@@ -130,30 +130,39 @@ def solve(
     steps: int,
     mutation_rate: float,
     eval_frequency: int = 50,
+    num_cars_dimension_size: int = 5,
+    average_route_length_dimension_size: int = 10,
+    max_average_route_length:int = 1000
 ):
     archive = Archive(
         environment,
-        num_cars_dimension_size=environment.num_vehicles,
-        average_route_length_dimension_size=10,
+        num_cars_dimension_size=num_cars_dimension_size,
+        average_route_length_dimension_size=average_route_length_dimension_size,
+        max_average_route_length=max_average_route_length
     )
 
     initialize(archive, environment, n_solutions=10)
+    score_history = []
 
-    for g in range(steps):
-        advance_single_step(archive, mutation_rate)
+    try:        
+        for g in range(steps):
+            advance_single_step(archive, mutation_rate)
 
-        if (g + 1) % eval_frequency == 0:
-            best_current_score = archive.get_best_score()
-            print(f"[{g + 1}/{steps}] Best distance: {1 / best_current_score}")
+            if (g + 1) % eval_frequency == 0:
+                best_current_score = archive.get_best_score()
+                print(f"[{g + 1}/{steps}] Best distance: {1 / best_current_score}")
+                score_history.append(archive.get_scores_as_array())
+    except KeyboardInterrupt:
+        pass
 
     best_final_solution = archive.get_best_solution()
-    plot_solution(
-        decode_solution(best_final_solution, environment),
-        environment,
-        "Final best solution",
-    )
+    #plot_solution(
+    #    decode_solution(best_final_solution, environment),
+    #    environment,
+    #    "Final best solution",
+    #)
 
-    plot_map_elite_scores(archive.get_scores_as_array())
+    archive.plot_score_history(score_history)
 
 
 def main():
@@ -165,4 +174,7 @@ def main():
         environment,
         steps=150000,
         mutation_rate=0.05,
+        num_cars_dimension_size=environment.num_vehicles,
+        average_route_length_dimension_size=10,
+        max_average_route_length=3000
     )
