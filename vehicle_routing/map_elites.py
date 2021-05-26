@@ -102,33 +102,36 @@ class Archive:
     def get_best_solution(self):
         return max(self._get_flattened_archive(), key=lambda x: x[1])[1]
 
-    def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int):
+    def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int, show_plot: bool = True):
         best_score = max(x.max() for x in scores)
         ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
 
-        fig = plt.figure()
+        fig = plt.figure(figsize=(15, 10))
 
         cbar = True
         def plot(data: np.ndarray):
             nonlocal cbar
+            data = data.T
             plt.cla()
-            sns.heatmap(data, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks, cbar=cbar)
+            sns.heatmap(data, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, xticklabels=ticks, cbar=cbar)
             cbar = False
         
         def init():
             plot(scores[0])
             plt.title(f"Archive scores")
-            plt.ylabel("Gjennomsnittlig rutelengde")
-            plt.xlabel("Antall biler")
+            plt.xlabel("Gjennomsnittlig rutelengde")
+            plt.ylabel("Antall biler")
 
         def update(i: int):
             plot(scores[i])
             plt.title(f"Archive scores (Step {(i + 1) * eval_frequency:06})")
         
         anim = FuncAnimation(fig, update, np.arange(1, len(scores)), init_func=init)
-        plt.show()
+        if show_plot:
+            plt.show()
+        return anim
     
-    def plot_archive_solutions(self):
+    def plot_archive_solutions(self, show_plot: bool = True):
         fig, axes = plt.subplots(self.num_cars_dimension_size, self.average_route_length_dimension_size, figsize=(15, 10))
         best_solution = self.get_best_solution()
 
@@ -146,7 +149,9 @@ class Archive:
                     background_color=background_color
                 )
         
-        plt.show()
+        if show_plot:
+            plt.show()
+        return fig
         
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
     for _ in range(n_solutions):
@@ -192,9 +197,9 @@ def solve(
     except KeyboardInterrupt:
         pass
 
-    archive.plot_archive_solutions()
-
-    archive.plot_score_history(score_history, eval_frequency)
+    archive_fig = archive.plot_archive_solutions(show_plot=False)
+    anim = archive.plot_score_history(score_history, eval_frequency, show_plot=False)
+    plt.show()
 
 
 def main():
