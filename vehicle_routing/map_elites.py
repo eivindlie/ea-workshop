@@ -36,19 +36,9 @@ class Archive:
         self.environment = environment
 
     def _get_num_cars(self, solution):
-        max_num = sum(1 if x < 0 else 0 for x in solution)
-        num = max_num - sum(
-            1
-            if i == 0
-            and solution[i] < 0
-            or i < len(solution) - 1
-            and solution[i] < 0
-            and solution[i + 1] < 0
-            or solution[i] < 0
-            and i == len(solution) - 1
-            else 0
-            for i in range(len(solution))
-        )
+        max_num = sum(1 if x < 0 else 0 for x in solution) + 1
+        decoded_solution = decode_solution(solution, self.environment)
+        num = sum(1 for x in decoded_solution if len(x) > 0)
 
         return int(((num - 1) / max_num) * self.num_cars_dimension_size)
 
