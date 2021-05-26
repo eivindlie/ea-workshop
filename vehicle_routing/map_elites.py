@@ -18,6 +18,7 @@ from .environment import (
     plot_solution,
 )
 
+
 class Archive:
     def __init__(
         self,
@@ -92,21 +93,39 @@ class Archive:
     def get_best_solution(self):
         return max(self._get_flattened_archive(), key=lambda x: x[0])[1]
 
-    def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int, show_plot: bool = True):
+    def plot_score_history(
+        self, scores: List[np.ndarray], eval_frequency: int, show_plot: bool = True
+    ):
         best_score = max(x.max() for x in scores)
-        ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
+        ticks = list(
+            (i + 1)
+            * (
+                self.max_average_route_length
+                // self.average_route_length_dimension_size
+            )
+            for i in range(self.average_route_length_dimension_size)
+        )
 
         fig = plt.figure(figsize=(15, 10))
         fig.suptitle("History of archive scores (animated)")
 
         cbar = True
+
         def plot(data: np.ndarray):
             nonlocal cbar
             data = data.T
             plt.cla()
-            sns.heatmap(data, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, xticklabels=ticks, cbar=cbar)
+            sns.heatmap(
+                data,
+                vmin=0,
+                vmax=best_score,
+                mask=(scores == -1),
+                annot=True,
+                xticklabels=ticks,
+                cbar=cbar,
+            )
             cbar = False
-        
+
         def init():
             plot(scores[0])
             plt.xlabel("Gjennomsnittlig rutelengde")
@@ -115,21 +134,27 @@ class Archive:
         def update(i: int):
             plot(scores[i])
             plt.title(f"Step {(i + 1) * eval_frequency:06}")
-        
+
         anim = FuncAnimation(fig, update, np.arange(1, len(scores)), init_func=init)
         if show_plot:
             plt.show()
         return anim
-    
+
     def plot_archive_solutions(self, show_plot: bool = True):
-        fig, axes = plt.subplots(self.num_cars_dimension_size, self.average_route_length_dimension_size, figsize=(15, 10))
+        fig, axes = plt.subplots(
+            self.num_cars_dimension_size,
+            self.average_route_length_dimension_size,
+            figsize=(15, 10),
+        )
         fig.suptitle("All solutions from archive")
         best_solution = self.get_best_solution()
 
         for y in range(self.average_route_length_dimension_size):
             for x in range(self.num_cars_dimension_size):
                 solution = self.archive[y][x][1]
-                background_color = "xkcd:mint green" if solution == best_solution else None
+                background_color = (
+                    "xkcd:mint green" if solution == best_solution else None
+                )
 
                 if solution is None:
                     continue
@@ -137,13 +162,14 @@ class Archive:
                     decode_solution(solution, self.environment),
                     self.environment,
                     ax=axes[x][y],
-                    background_color=background_color
+                    background_color=background_color,
                 )
-        
+
         if show_plot:
             plt.show()
         return fig
-        
+
+
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
     for _ in range(n_solutions):
         solution = create_random_solution(environment)
@@ -165,19 +191,19 @@ def solve(
     eval_frequency: int = 50,
     num_cars_dimension_size: int = 5,
     average_route_length_dimension_size: int = 10,
-    max_average_route_length:int = 1000
+    max_average_route_length: int = 1000,
 ):
     archive = Archive(
         environment,
         num_cars_dimension_size=num_cars_dimension_size,
         average_route_length_dimension_size=average_route_length_dimension_size,
-        max_average_route_length=max_average_route_length
+        max_average_route_length=max_average_route_length,
     )
 
     initialize(archive, environment, n_solutions=10)
     score_history = []
 
-    try:        
+    try:
         for g in range(steps):
             advance_single_step(archive, mutation_rate)
 
@@ -205,5 +231,5 @@ def main():
         mutation_rate=0.05,
         num_cars_dimension_size=environment.num_vehicles,
         average_route_length_dimension_size=10,
-        max_average_route_length=3000
+        max_average_route_length=3000,
     )

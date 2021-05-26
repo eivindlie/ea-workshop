@@ -10,6 +10,7 @@ sns.set()
 
 OVERFILLED_VEHICLE_PENALTY = 250
 
+
 class City:
     def __init__(self, x: float, y: float) -> None:
         self.x = x
@@ -54,7 +55,9 @@ def calculate_route_lengths(
             distance += from_city.distance(to_city)
 
         if len(vehicle_cities) > environment.vehicle_capacity:
-            distance += OVERFILLED_VEHICLE_PENALTY * (len(vehicle_cities) - environment.vehicle_capacity)
+            distance += OVERFILLED_VEHICLE_PENALTY * (
+                len(vehicle_cities) - environment.vehicle_capacity
+            )
 
         all_distances.append(distance)
 
@@ -68,7 +71,11 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
 
 
 def plot_solution(
-    solution: List[List[City]], environment: Environment, title: str = None, ax=None, background_color=None
+    solution: List[List[City]],
+    environment: Environment,
+    title: str = None,
+    ax=None,
+    background_color=None,
 ) -> None:
     plotter = ax if ax is not None else plt
     colors = ["blue", "red", "yellow", "orange", "green", "cyan"]
@@ -95,7 +102,7 @@ def plot_solution(
             ax.set_title(title)
         else:
             plt.title(title)
-    
+
     if background_color is not None:
         if ax is not None:
             ax.set_facecolor(background_color)
