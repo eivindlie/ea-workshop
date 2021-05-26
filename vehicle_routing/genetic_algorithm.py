@@ -99,6 +99,13 @@ def mutate(individual: List[int], mutation_rate: float) -> List[int]:
                 individual[swapped],
             )
 
+    if random.random() < mutation_rate:
+        p1 = random.randint(0, len(individual) - 1)
+        p2 = random.randint(0, len(individual) - 1)
+        p1, p2 = (p2, p1) if p2 < p1 else (p1, p2)
+        if p1 != p2:
+            individual = individual[0:p1] + individual[p2:p1:-1] + individual[p2:]
+
     return individual
 
 
