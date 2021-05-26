@@ -100,7 +100,7 @@ class Archive:
         return max(self._get_flattened_archive(), key=lambda x: x[0])[0]
 
     def get_best_solution(self):
-        return max(self._get_flattened_archive(), key=lambda x: x[1])[1]
+        return max(self._get_flattened_archive(), key=lambda x: x[0])[1]
 
     def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int, show_plot: bool = True):
         best_score = max(x.max() for x in scores)
