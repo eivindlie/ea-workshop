@@ -60,7 +60,8 @@ class Archive:
         return int(((num - 1) / max_num) * self.num_cars_dimension_size)
 
     def _get_average_route_length(self, route_lengths):
-        avg = sum(route_lengths) / len(route_lengths)
+        non_zero_lengths = [x for x in route_lengths if x > 0]
+        avg = sum(non_zero_lengths) / len(non_zero_lengths)
 
         return int(
             min(0.99999, (avg / self.max_average_route_length))
