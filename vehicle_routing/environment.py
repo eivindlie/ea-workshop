@@ -68,7 +68,7 @@ def evaluate(solution: List[List[City]], environment: Environment) -> float:
 def plot_solution(
     solution: List[List[City]], environment: Environment, title: str = None
 ) -> None:
-    colors = ["blue", "red", "yellow", "orange"]
+    colors = ["blue", "red", "yellow", "orange", "green", "cyan"]
     for r, vehicle_cities in enumerate(solution):
         color = colors[r % len(colors)]
 

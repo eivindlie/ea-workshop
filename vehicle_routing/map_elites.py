@@ -118,11 +118,11 @@ def solve(
 
 def main():
     environment = Environment(
-        num_cities=25, num_vehicles=5, vehicle_capacity=8, seed=None
+        num_cities=25, num_vehicles=5, vehicle_capacity=6, seed=None
     )
 
     solve(
         environment,
-        steps=100000,
+        steps=150000,
         mutation_rate=0.05,
     )

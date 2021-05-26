@@ -69,7 +69,7 @@ Med TSP valgte representasjonen av løsningene våre seg litt selv – en liste
 
 - Gå til `vehicle_routing/genetic_algorithm`, og fyll inn kode alle steder der det står `# TODO`. Prøv å få algoritmen til å finne en god løsning på Vehicle Routing-problemet.
 
-### Ekstraoppgave: Quality Diversity
+## Ekstraoppgave: Quality Diversity
 
 Til nå har vi primært jobbet med en klassisk genetisk algoritme. Denne er først og fremst lagd for å finne én god løsning på problemet, og man vil ofte oppleve at mange av løsningene i populasjonen er ganske like mot slutten av optimeringsprosessen.
 
@@ -78,3 +78,9 @@ Til nå har vi primært jobbet med en klassisk genetisk algoritme. Denne er før
 MAP-Elites er mer en løs strategi enn en komplett algoritme, og bygger på et enkelt prinsipp: vi erstatter populasjonen i genetiske algoritmer med et arkiv av løsninger som er inndelt i etter noen forhåndsdefinerte kriterier. Arkivet inneholder den beste løsningen vi har funnet til nå for hver gruppe disse kriteriene definerer. Dette gjør at en løsning kan bli tatt vare på utelukkende fordi den representerer en annen måte å løse problemet på enn løsningene vi har funnet til nå. Hvis vi derimot senere finner en liknende løsning som er bedre vil denne erstatte den forrige løsningen. Til slutt sitter vi igjen med en variert samling av løsninger som hver er den beste løsningen av den typen vi har funnet.
 
 Vehicle Routing Problem er fortsatt et nokså enkelt problem, men det er komplekst nok til at vi kan prøve ut MAP-elites. En viktig komponent i en MAP-elites-løsning er hvordan arkivet er inndelt. I denne oppgaven prøver vi oss på en inndeling langs to dimensjoner: antall biler som er aktive i løsningen, og gjennomsnittlig lengde på rutene disse tilbakelegger.
+
+### Oppgave:
+
+- Kjør koden i fila `vehicle_routing/map_elites`. Hvordan er resultatet her sammenliknet med den genetiske algoritmen? Prøv å forstå hvordan koden er bygd opp, og hvordan denne algoritmen skiller seg fra en genetisk algoritme
+
+> MAP-Elites-implementasjonen bruker de samme genetiske operatorene som du implementerte for den genetiske algoritmen. Vi bruker samme representasjon, så dette skal gå helt fint. Det kan likevel hende at det lønner seg å endre på noen parametere – bl.a. tåler MAP-Elites mer exploration, siden vi uansett sikrer at vi tar vare på de beste løsningene innenfor hver nisje. Prøv deg gjerne litt fram!
