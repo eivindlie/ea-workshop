@@ -1,5 +1,6 @@
 import random
 from typing import List
+import imageio
 
 import numpy as np
 import seaborn as sns
@@ -101,14 +102,32 @@ class Archive:
     def get_best_solution(self):
         return max(self._get_flattened_archive(), key=lambda x: x[1])[1]
 
-    def plot_score_history(self, scores: List[np.ndarray]):
+    def plot_score_history(self, scores: List[np.ndarray], eval_frequency: int):
         best_score = max(x.max() for x in scores)
         ticks = list((i + 1) * (self.max_average_route_length // self.average_route_length_dimension_size) for i in range(self.average_route_length_dimension_size))
-        sns.heatmap(scores[-1], vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks)
-        plt.title("Archive scores")
-        plt.ylabel("Gjennomsnittlig rutelengde")
-        plt.xlabel("Antall biler")
-        plt.show()
+        
+        filenames = []
+
+        for i, score_array in enumerate(scores):
+            filename = f"plots/{i}.png"
+            filenames.append(filename)
+
+            sns.heatmap(score_array, vmin=0, vmax=best_score, mask=(scores == -1), annot=True, yticklabels=ticks)
+            plt.title(f"Archive scores (Generation {(i + 1) * eval_frequency:04})")
+            plt.ylabel("Gjennomsnittlig rutelengde")
+            plt.xlabel("Antall biler")
+            plt.savefig(filename)
+            plt.close()
+
+        
+        with imageio.get_writer('plots/me_scores.gif', mode='I') as writer:
+            for filename in filenames:
+                image = imageio.imread(filename)
+                writer.append_data(image)
+        
+        
+
+        
 
 
 def initialize(archive: Archive, environment: Environment, n_solutions: int = 10):
