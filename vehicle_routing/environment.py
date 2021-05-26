@@ -44,6 +44,7 @@ def calculate_route_lengths(
     solution: List[List[City]], environment: Environment
 ) -> List[float]:
     all_distances = []
+    assert sum(len(x) for x in solution) == len(environment.cities), "Invalid solution"
 
     for vehicle_cities in solution:
         distance = 0
