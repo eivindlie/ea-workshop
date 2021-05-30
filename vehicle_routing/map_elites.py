@@ -65,10 +65,6 @@ class Archive:
         # Tips: Løsningen vi har funnet skal inn i self.archive[average_route_length][num_cars].
         # Løsninger lagres i arkivet som en tuppel (score, solution).
 
-        old_score = self.archive[average_route_length][num_cars][0]
-        if score > old_score:
-            self.archive[average_route_length][num_cars] = (score, new_solution)
-
     def _get_flattened_archive(self):
         return [x for y in self.archive for x in y if x[0] != -1]
 
