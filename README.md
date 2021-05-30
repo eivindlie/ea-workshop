@@ -57,6 +57,8 @@ I første del skal vi løse en variant av TSP. Koden for dette ligger i `travell
 
 ## 2. Vehicle Routing Problem
 
+<details>
+<summary>Se innhold</summary>
 Travelling Salesman Problem er et nokså enkelt problem å løse med evolusjonære algoritmer – i hvert fall når antallet byer som skal besøkes er nokså lavt, slik det som det var for oss. [Vehicle Routing Problem (VRP)](https://en.wikipedia.org/wiki/Vehicle_routing_problem) er et problem som likner på Traveling Salesman Problem, men vi kompliserer det noe ved å innføre flere aktører. I stedet for at vi har én handelsmann som skal besøke noen byer tenker vi oss at vi har flere kjøretøy som skal samarbeide om å levere pakker til et sett med kunder. Hvert kjøretøy må starte og ende opp på et depot, og kan dessuten bare frakte et begrenset antall pakker. Vi ønsker å minimere den totale avstanden som blir tilbakelagt av alle kjøretøyene.
 
 Med TSP valgte representasjonen av løsningene våre seg litt selv – en liste med rekkefølgen på byene føltes veldig naturlig. For VRP er problemet mer komplekst, og man må legge mer arbeid i å finne en god representasjon. I koden i dette repoet er det valgt en representasjon listerepresentasjon som inneholder indekser til alle byene i den rekkefølgen de skal besøkes. I tillegg inneholder lista (n - 1) negative tall, der n er antallet biler. Alle byer mellom en ende av lista og et negativt tall, eller mellom to negative tall, vil besøkes av samme bilen.:
@@ -69,7 +71,11 @@ Med TSP valgte representasjonen av løsningene våre seg litt selv – en liste
 
 - Gå til `vehicle_routing/genetic_algorithm`, og fyll inn kode alle steder der det står `# TODO`. Prøv å få algoritmen til å finne en god løsning på Vehicle Routing-problemet.
 
-## Ekstraoppgave: Quality Diversity
+</details>
+
+<details>
+<summary>Ekstraoppgave</summary>
+## Quality Diversity
 
 Til nå har vi primært jobbet med en klassisk genetisk algoritme. Denne er først og fremst lagd for å finne én god løsning på problemet, og man vil ofte oppleve at mange av løsningene i populasjonen er ganske like mot slutten av optimeringsprosessen.
 
@@ -85,3 +91,5 @@ Vehicle Routing Problem er fortsatt et nokså enkelt problem, men det er komplek
 - Kjør fila `vehicle_routing/map_elites`. Hvordan er resultatet her sammenliknet med den genetiske algoritmen? Prøv å forstå hvordan koden er bygd opp, og hvordan denne algoritmen skiller seg fra en genetisk algoritme
 
 > MAP-Elites-implementasjonen bruker de samme genetiske operatorene som du implementerte for den genetiske algoritmen. Vi bruker samme representasjon, så dette skal gå helt fint. Det kan likevel hende at det lønner seg å endre på noen parametere – bl.a. tåler MAP-Elites mer exploration, siden vi uansett sikrer at vi tar vare på de beste løsningene innenfor hver nisje. Prøv deg gjerne litt fram!
+
+</details>
