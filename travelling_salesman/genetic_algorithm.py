@@ -13,9 +13,7 @@ def create_random_route(cities: List[City]) -> List[City]:
 def initialize_population(population_size: int, cities: List[City]) -> List[List[City]]:
     population = []
 
-    # TODO Initialiser populasjonen
-    for _ in range(population_size):
-        population.append(create_random_route(cities))
+    # TODO Initialiser populasjonen med population_size løsninger
 
     return population
 
@@ -32,11 +30,8 @@ def selection(population_ranked: List[Fitness], elite_size: float):
     for i in range(elite_size):
         selection_results.append(population_ranked[i])
 
-    # TODO Implementer selection-mekanisme
-    while len(selection_results) < len(population_ranked):
-        competitors = random.sample(population_ranked, 5)
-        winner = max(competitors, key=lambda x: x.fitness)
-        selection_results.append(winner)
+    # TODO Implementer selection-mekanisme som velger ut kandidater til crossover.
+    # Pass på at størrelsen på populasjonen ikke endres!
 
     return [x.route for x in selection_results]
 
@@ -44,12 +39,7 @@ def selection(population_ranked: List[Fitness], elite_size: float):
 def crossover(parent1, parent2) -> List[City]:
     # TODO Implementer crossover
 
-    crossover_point = random.randint(0, len(parent1) - 1)
-
-    child_p1 = parent1[:crossover_point]
-    child_p2 = [x for x in parent2 if x not in child_p1]
-
-    child = child_p1 + child_p2
+    child = parent1
 
     return child
 
@@ -74,13 +64,6 @@ def mutate(individual: List[City], mutation_rate: float) -> List[City]:
     individual = [x for x in individual]
 
     # TODO Implementer mutation-mekanisme
-    for swapped in range(len(individual)):
-        if random.random() < mutation_rate:
-            swap_with = int(random.random() * len(individual))
-            individual[swapped], individual[swap_with] = (
-                individual[swap_with],
-                individual[swapped],
-            )
 
     return individual
 

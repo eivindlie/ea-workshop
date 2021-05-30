@@ -30,8 +30,6 @@ def initialize_population(
     population = []
 
     # TODO Initialiser populasjonen
-    for _ in range(population_size):
-        population.append(create_random_solution(environment))
 
     return population
 
@@ -56,10 +54,6 @@ def selection(
         selection_results.append(population_ranked[i][1])
 
     # TODO Implementer selection-mekanisme
-    while len(selection_results) < len(population_ranked):
-        competitors = random.sample(population_ranked, 5)
-        winner = max(competitors, key=lambda x: x[0])
-        selection_results.append(winner[1])
 
     return selection_results
 
@@ -67,12 +61,7 @@ def selection(
 def crossover(parent1, parent2) -> List[int]:
     # TODO Implementer crossover
 
-    crossover_point = random.randint(0, len(parent1) - 1)
-
-    child_p1 = parent1[:crossover_point]
-    child_p2 = [x for x in parent2 if x not in child_p1]
-
-    child = child_p1 + child_p2
+    child = parent1
 
     return child
 
@@ -91,20 +80,6 @@ def mutate(individual: List[int], mutation_rate: float) -> List[int]:
     individual = [x for x in individual]
 
     # TODO Implementer mutation-mekanisme
-    for swapped in range(len(individual)):
-        if random.random() < mutation_rate:
-            swap_with = random.randint(0, len(individual) - 1)
-            individual[swapped], individual[swap_with] = (
-                individual[swap_with],
-                individual[swapped],
-            )
-
-    if random.random() < mutation_rate:
-        p1 = random.randint(0, len(individual) - 1)
-        p2 = random.randint(0, len(individual) - 1)
-        p1, p2 = (p2, p1) if p2 < p1 else (p1, p2)
-        if p1 != p2:
-            individual = individual[0:p1+1] + individual[p2:p1:-1] + individual[p2+1:]
 
     return individual
 
