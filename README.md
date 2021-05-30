@@ -43,6 +43,9 @@ I første del skal vi løse en variant av TSP. Koden for dette ligger i `travell
 
 1. Se på koden i `hill_climbing.py`, og prøvekjør denne løsningen. Prøv å forstå hvordan algoritmen fungerer. Hvorfor funker ikke denne løsningen spesielt godt?
 2. Se nå på løsningen i `simulated_annealing.py`, og prøvekjør denne. Blir resultatet annerledes med denne metoden? Hva er grunnen til dette?
+
+> Simulated Annealing er en overraskende kraftig algoritme, og kan sannsynligvis gi mye bedre resultater på dette problemet etter litt tuning. I denne workshopen bruker vi den bare som et eksempel på veien mot genetiske algoritmer, og er derfor ikke så nøye med tuningen.
+
 3. Se på koden i `genetic_algorithm.py`. Her må du fylle inn en del kode selv for at algoritmen kan kjøre. Finn alle steder som er merket med `# TODO`, og legg inn dine løsninger. Du må blant annet ta stilling til følgende:
 
    - Initialisering
