@@ -75,6 +75,7 @@ Med TSP valgte representasjonen av løsningene våre seg litt selv – en liste
 
 <details>
 <summary>Ekstraoppgave</summary>
+
 ## Quality Diversity
 
 Til nå har vi primært jobbet med en klassisk genetisk algoritme. Denne er først og fremst lagd for å finne én god løsning på problemet, og man vil ofte oppleve at mange av løsningene i populasjonen er ganske like mot slutten av optimeringsprosessen.
