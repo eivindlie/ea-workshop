@@ -21,7 +21,7 @@ Det er lagt opp til at alle oppgavene kjøres gjennom `main.py`. Denne inneholde
 <details>
   <summary>Vis innhold</summary>
 
-Det anbefales å prøve så godt man kan å løse oppgavene selv, men dersom du skulle stå helt fast, er det mulig å ta en titt på hvordan oppgavene er løst i branchen `lf`.
+Det anbefales å prøve så godt man kan å løse oppgavene selv, men dersom du skulle stå helt fast, er det mulig å ta en titt på hvordan oppgavene er løst i branchen `lf`. Løsningene her er på ingen måte perfekte, men gir et innblikk i hvordan ting burde funke.
 
 </details>
 
@@ -44,7 +44,7 @@ I første del skal vi løse en variant av TSP. Koden for dette ligger i `travell
 1. Se på koden i `hill_climbing.py`, og prøvekjør denne løsningen. Prøv å forstå hvordan algoritmen fungerer. Hvorfor funker ikke denne løsningen spesielt godt?
 2. Se nå på løsningen i `simulated_annealing.py`, og prøvekjør denne. Blir resultatet annerledes med denne metoden? Hva er grunnen til dette?
 
-> Simulated Annealing er en overraskende kraftig algoritme, og kan sannsynligvis gi mye bedre resultater på dette problemet etter litt tuning. I denne workshopen bruker vi den bare som et eksempel på veien mot genetiske algoritmer, og er derfor ikke så nøye med tuningen.
+> **Merk:** Simulated Annealing er en overraskende kraftig algoritme, og kan sannsynligvis gi mye bedre resultater på dette problemet etter litt tuning. I denne workshopen bruker vi den bare som et eksempel på veien mot genetiske algoritmer, og er derfor ikke så nøye med tuningen.
 
 3. Se på koden i `genetic_algorithm.py`. Her må du fylle inn en del kode selv for at algoritmen kan kjøre. Finn alle steder som er merket med `# TODO`, og legg inn dine løsninger. Du må blant annet ta stilling til følgende:
 
@@ -54,6 +54,8 @@ I første del skal vi løse en variant av TSP. Koden for dette ligger i `travell
    - Mutering
 
    I tillegg er det flere parametere som kan finjusteres for å endre på hvordan algoritmen oppfører seg. Se om du klarer å få algoritmen til å løse Travelling Salesman-problemet.
+
+> **Tips**: I problemene i denne oppgaven vil en god løsning som regel være en "ring" innom alle byene, der handelsmannen aldri krysser sine egne fotspor.
 
 4. (Valgfritt) Lek deg gjerne med implementasjonen dersom du har tid. Kan man f.eks. innføre flere forskjellige typer mutasjon?
 </details>
@@ -68,7 +70,7 @@ Med TSP valgte representasjonen av løsningene våre seg litt selv – en liste
 
 ![](./images/vrp-representation.png)
 
-> Merk: Det finnes mange måter å representere løsningene på, og flere forskjellige representasjoner kan fungere godt. Det er imidlertid viktig å se på representasjon og variasjonsoperatorer (crossover/mutation) i sammenheng, da disse påvirker hverandre.
+> **Merk:** Det finnes mange måter å representere løsningene på, og flere forskjellige representasjoner kan fungere godt. Det er imidlertid viktig å se på representasjon og variasjonsoperatorer (crossover/mutation) i sammenheng, da disse påvirker hverandre.
 
 ### Oppgave:
 
@@ -94,6 +96,8 @@ Vehicle Routing Problem er fortsatt et nokså enkelt problem, men det er komplek
 - Åpne `vehicle_routing/map_elites`, og fyll inn kode der det står `# TODO`
 - Kjør fila `vehicle_routing/map_elites`. Hvordan er resultatet her sammenliknet med den genetiske algoritmen? Prøv å forstå hvordan koden er bygd opp, og hvordan denne algoritmen skiller seg fra en genetisk algoritme
 
-> MAP-Elites-implementasjonen bruker de samme genetiske operatorene som du implementerte for den genetiske algoritmen. Vi bruker samme representasjon, så dette skal gå helt fint. Det kan likevel hende at det lønner seg å endre på noen parametere – bl.a. tåler MAP-Elites mer exploration, siden vi uansett sikrer at vi tar vare på de beste løsningene innenfor hver nisje. Prøv deg gjerne litt fram!
+> **Tips:** MAP-Elites-implementasjonen bruker de samme genetiske operatorene som du implementerte for den genetiske algoritmen. Vi bruker samme representasjon, så dette skal gå helt fint. Det kan likevel hende at det lønner seg å endre på noen parametere – bl.a. tåler MAP-Elites mer exploration, siden vi uansett sikrer at vi tar vare på de beste løsningene innenfor hver nisje. Prøv deg gjerne litt fram!
+
+> **Merk:** Etter at MAP-Elites-algoritmen er kjørt vises det et par plott som illustrerer hvordan den har kommet fram til løsningen. Spør gjerne dersom du sliter med å tolke disse!
 
 </details>
