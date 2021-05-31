@@ -48,6 +48,10 @@ def exponential_multiplicative_decay(initial_value, decay):
     return lambda t: initial_value * decay ** t
 
 
+def linear_decay(initial_value, slope):
+    return lambda t: max(0.0000001, initial_value - slope * t)
+
+
 def solve(
     cities: List[City],
     generations: int = 500,
@@ -95,7 +99,7 @@ def main():
         generations=2500,
         eval_frequency=200,
         show_plots=False,
-        temperature_function=exponential_multiplicative_decay(100, 0.99),
+        temperature_function=linear_decay(100, 0.05),
     )
 
 
