@@ -85,9 +85,10 @@ def mutate(individual: List[int], mutation_rate: float) -> List[int]:
 
 
 def mutate_population(
-    population: List[List[int]], mutation_rate: float
+    population: List[List[int]], mutation_rate: float,
+    elite_size: int
 ) -> List[List[int]]:
-    mutated_pop = [mutate(x, mutation_rate) for x in population]
+    mutated_pop = population[:elite_size] + [mutate(x, mutation_rate) for x in population[:elite_size]]
 
     return mutated_pop
 
@@ -101,7 +102,7 @@ def next_generation(
     pop_ranked = evaluate(current_gen, environment)
     mating_pool = selection(pop_ranked, elite_size)
     children = recombine(mating_pool, elite_size)
-    next_gen = mutate_population(children, mutation_rate)
+    next_gen = mutate_population(children, mutation_rate, elite_size)
 
     return next_gen
 
@@ -171,7 +172,7 @@ def main():
     solve(
         environment,
         population_size=50,
-        elite_size=5,
+        elite_size=3,
         mutation_rate=0.05,
         generations=2000,
         eval_frequency=100,
