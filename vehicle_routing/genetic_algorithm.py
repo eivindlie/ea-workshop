@@ -88,7 +88,7 @@ def mutate_population(
     population: List[List[int]], mutation_rate: float,
     elite_size: int
 ) -> List[List[int]]:
-    mutated_pop = population[:elite_size] + [mutate(x, mutation_rate) for x in population[:elite_size]]
+    mutated_pop = population[:elite_size] + [mutate(x, mutation_rate) for x in population[elite_size:]]
 
     return mutated_pop
 
